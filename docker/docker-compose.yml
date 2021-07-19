@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  nws_redis:
+    image: redis:6-buster
+    volumes:
+      - data-redis:/data
+    entrypoint: redis-server --rdbcompression yes --dbfilename nws.rdb --save 500 1 --timeout 0
+    networks:
+      - nws-network
+    restart: always
+  nws_rabbitmq:
+    image: rabbitmq:3.8.9-management
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/
+      - rabbitmq-log:/var/log/rabbitmq/
+    environment:
+      RABBITMQ_ERLANG_COOKIE: rabbitmq
+      RABBITMQ_DEFAULT_USER: nws-admin
+      RABBITMQ_DEFAULT_PASS: 1od92vMjHAeA91O7vUJo5XqCcgb7ofYxsuy3gqJ9LM
+    networks:
+      - nws-network
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+
+  nws_app:
+    image: nexfon-nws
+    build:
+      context: ..
+      dockerfile: ./Dockerfile
+    depends_on:
+      - nws_redis
+      - nws_rabbitmq
+    networks:
+      - nws-network
+    ports:
+      - "8086:8000"
+    volumes:
+      - ./configs/nws.json:/etc/nws/nws.json:ro
+    restart: unless-stopped
+networks:
+  nws-network:
+    driver: bridge
+volumes:
+  data-redis:
+  rabbitmq-data:
+  rabbitmq-log:

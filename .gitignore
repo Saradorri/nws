@@ -1,0 +1,5 @@
+vendor/*
+.idea/*
+.vscode/*
+build/*
+docker/configs/nws.json

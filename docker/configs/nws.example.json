@@ -1,0 +1,22 @@
+{
+  "rabbitmq": {
+    "username": "nws-admin",
+    "password": "1od92vMjHAeA91O7vUJo5XqCcgb7ofYxsuy3gqJ9LM",
+    "host": "nws_rabbitmq",
+    "port": "5672"
+  },
+  "queues" : [
+    "q",
+    "q2"
+  ],
+  "server": {
+    "port": "8000",
+    "resendInSeconds" : 1
+  },
+  "redis":{
+    "name": 1,
+    "host": "nws_redis",
+    "port": "6379",
+    "password": ""
+  }
+}
